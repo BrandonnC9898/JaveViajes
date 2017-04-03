@@ -1,0 +1,5 @@
+#codigo---nombre------------------email
+1	*Juan Valdez		*juanvaldez@gmail.com
+2	*Ana Blanco		*anab@hotmail.com
+3	*Pepe Pepaso		*teganasteUnPepaso@gmail.com
+0

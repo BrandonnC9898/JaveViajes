@@ -1,0 +1,9 @@
+#código--nombre
+9	*Bogota2
+10	*New York2
+11	*Los Angeles2
+12	*Cali2
+13	*Cartagena2
+14	*Puerto Carreño2
+15	*Santa Marta2
+0
