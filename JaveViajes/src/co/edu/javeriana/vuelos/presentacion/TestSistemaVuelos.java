@@ -47,7 +47,7 @@ public class TestSistemaVuelos {
 			switch(numeroR){
 			case 1:
 			{
-				System.out.println("Opción 1: Ingresar ciudades del sistema.");
+				System.out.println("Ingresar ciudades del sistema");
 				System.out.println("Ingrese el nombre del archivo (incluya la extesión)");
 				linea = scanner.nextLine();
 				if(ManejoArchivos.leerCiudad(linea,sistemaVuelo)){
@@ -59,7 +59,7 @@ public class TestSistemaVuelos {
 			}
 			break;
 			case 2:{
-				System.out.println("Opción 2: Ingresar aerolineas y vuelos planeados del sistema.");
+				System.out.println("Ingresar aerolineas y vuelos planeados del sistema.");
 				System.out.println("Ingrese el nombre del archivo (incluya la extesión)");
 				linea = scanner.nextLine();
 				if(ManejoArchivos.ingresarAerolinea(linea,sistemaVuelo)){
@@ -72,7 +72,7 @@ public class TestSistemaVuelos {
 			break;
 			case 3:
 			{
-				System.out.println("Opción 3: Ingresar agentes del sistema.");
+				System.out.println("Ingresar agentes del sistema.");
 				System.out.println("Ingrese el nombre del archivo (incluya la extesión)");
 				linea = scanner.nextLine();
 				if(ManejoArchivos.ingresarAgente(linea,sistemaVuelo)){
@@ -84,7 +84,7 @@ public class TestSistemaVuelos {
 			}
 			break;
 			case 4:{
-				System.out.println("Opción 4: Agregar un vuelo especifico para un vuelo planeado.");
+				System.out.println("Agregar un vuelo especifico para un vuelo planeado.");
 				System.out.println("AEROLINEAS REGISTRADAS:");
 				System.out.println("Código   Nombre");
 				System.out.println("--------------------------------------------------");
@@ -97,14 +97,18 @@ public class TestSistemaVuelos {
 				else{
 					System.out.println("No hay aerolineas regristradas");
 				}
-				System.out.println("Ingrese el codigo de la aerolinea a la cual pertenece el vuelo especifico");
-				linea = scanner.nextLine();
-				long codAerolinea = Long.parseLong(linea.trim());
-				int iAerolinea = sistemaVuelo.buscarAerolinea(codAerolinea);
+				int iAerolinea = 0;
+				long codAerolinea = 0;
+				do{
+					System.out.println("Ingrese el codigo de la aerolinea a la cual pertenece el vuelo especifico");
+					linea = scanner.nextLine();
+					codAerolinea = Long.parseLong(linea.trim());
+					iAerolinea = sistemaVuelo.buscarAerolinea(codAerolinea);
+				}while(iAerolinea < 0);
 				Aerolinea aerolinea = sistemaVuelo.getAerolineas().get(iAerolinea);
-				System.out.println("LISTA DE VUELOS PLANEADOS DE LA AEROLINEA:"+aerolinea.getNombre());
-				System.out.println("--------------------------------------------------");
+				System.out.println("\nLISTA DE VUELOS PLANEADOS DE LA AEROLINEA:"+aerolinea.getNombre());
 				System.out.println("Código  Número de vuelo Día de semana  Hora salida  Hora llegada Origen Destino");
+				System.out.println("--------------------------------------------------");
 				if(aerolinea.getVuelosPlaneados() != null){
 					for(VueloPlaneado vueloPlaneadoI : aerolinea.getVuelosPlaneados()){
 						System.out.println(vueloPlaneadoI.toString() + " " + vueloPlaneadoI.getOrigen().getNombre() + " " + vueloPlaneadoI.getDestino().getNombre());
@@ -114,38 +118,51 @@ public class TestSistemaVuelos {
 				else{
 					System.out.println("No hay vuelos planeados regristrados");
 				}
-				System.out.println("Ingrese el codigo del vuelo planeado al cual pertenece el vuelo especifico");
-				linea = scanner.nextLine(); 
-				long codVP = Long.parseLong(linea.trim());
-				System.out.println("Ingrese los datos del vuelo especifico: fecha(YYYY-MM-DD), tipo de avion, capacidad y tarifa (US)");
-				linea = scanner.nextLine();
-				StringTokenizer organiza = new StringTokenizer(linea.trim()," ");
-				String fech = organiza.nextToken();
-				String tipoAvion = organiza.nextToken();
-				String capacida = organiza.nextToken();
-				String tarif = organiza.nextToken();
-				LocalDate fecha = Utils.conversorFecha(fech);
-				int capacidad = Integer.parseInt(capacida);
-				int tarifa = Integer.parseInt(tarif);
+				long codVP = 0;
+				do{
+					System.out.println("Ingrese el codigo del vuelo planeado al cual pertenece el vuelo especifico");
+					linea = scanner.nextLine(); 
+					codVP = Long.parseLong(linea.trim());
+				}while(sistemaVuelo.buscarVueloPlaneado(codAerolinea, codVP) < 0);
+				LocalDate fecha = null;
+				int capacidad = 0, tarifa = 0;
+				String tipoAvion = null;
+				do{
+					System.out.println("Ingrese los datos del vuelo especifico: fecha(YYYY-MM-DD), tipo de avion, capacidad y tarifa (US)");
+					linea = scanner.nextLine();
+					StringTokenizer organiza = new StringTokenizer(linea.trim()," ");
+					String fech = organiza.nextToken();
+					tipoAvion = organiza.nextToken();
+					String capacida = organiza.nextToken();
+					String tarif = organiza.nextToken();
+					fecha = Utils.conversorFecha(fech);
+					capacidad = Integer.parseInt(capacida);
+					tarifa = Integer.parseInt(tarif);
+					System.out.println("¿Desea enviar los datos? s para enviar y otra tecla para volver a escribir los datos");
+					linea = scanner.nextLine();
+				}while(!linea.equals("s"));
 				Long codigoVE = sistemaVuelo.crearVueloEspecifico(codAerolinea, codVP, fecha, tipoAvion, capacidad, tarifa);
 				System.out.println("El codigo del vuelo especifico creado es:" + codigoVE);
 			}
 			break;
 			case 5:{
-				System.out.println("Opción 5: Mostrar aerolineas, vuelos planeados y vuelos especificos del sistema.");
+				System.out.println("Mostrar aerolineas, vuelos planeados y vuelos especificos del sistema");
 				System.out.println("AEROLINEAS REGISTRADAS:");
 				System.out.println("Código   Nombre");
 				System.out.println("--------------------------------------------------");
 				if(sistemaVuelo.getAerolineas() != null){
 					for(Aerolinea aerolineaI : sistemaVuelo.getAerolineas()){
 						System.out.println(aerolineaI.toString());
+						System.out.println("\n--------------------------------------------------");
 						System.out.println("LISTA DE VUELOS PLANEADOS:");
+						System.out.println("Código  Número de vuelo Día de semana  Hora salida  Hora llegada Origen Destino");
 						System.out.println("--------------------------------------------------");
 						if(aerolineaI.getVuelosPlaneados() != null){
 							for(VueloPlaneado vueloPlaneadoI : aerolineaI.getVuelosPlaneados()){
 								String origenI = vueloPlaneadoI.getOrigen().getNombre();
 								String destinoI = vueloPlaneadoI.getDestino().getNombre();
 								System.out.println(vueloPlaneadoI.toString() + " " + origenI + " " + destinoI);
+								System.out.println("\n--------------------------------------------------");
 								System.out.println("LISTA DE VUELOS ESPECIFICOS");
 								System.out.println("--------------------------------------------------");
 								if(vueloPlaneadoI.getVuelosEspecificos() != null){
@@ -171,7 +188,7 @@ public class TestSistemaVuelos {
 			}
 			break;
 			case 6:{
-				System.out.println("Opción 6: Agregar un itinerario para un agente.");
+				System.out.println("Agregar un itinerario para un agente");
 				System.out.println("AGENTES REGISTRADOS");
 				System.out.println("--------------------------------------------------");
 				if(sistemaVuelo.getAgentes() != null){
@@ -204,7 +221,7 @@ public class TestSistemaVuelos {
 			}
 			break;
 			case 7:{
-				System.out.println("Opción 7: Agregar un trayecto asociado a un itinerario.");
+				System.out.println("Agregar un trayecto asociado a un itinerario");
 				System.out.println("AGENTES REGISTRADOS");
 				System.out.println("--------------------------------------------------");
 				if(sistemaVuelo.getAgentes() != null){
@@ -280,7 +297,7 @@ public class TestSistemaVuelos {
 			}
 			break;
 			case 8:{
-				System.out.println("Opción 8: Mostrar agentes, itinerarios y trayectos");
+				System.out.println("Mostrar agentes, itinerarios y trayectos");
 				System.out.println("AGENTES REGISTRADOS");
 				System.out.println("--------------------------------------------------");
 				if(sistemaVuelo.getAgentes() != null){
@@ -325,7 +342,7 @@ public class TestSistemaVuelos {
 			}
 			break;
 			case 9:{
-				System.out.println("Opción 9: Comprar un itinearario asignando a cada pasajero una silla sobre cada trayecto del itinerario.");
+				System.out.println("Comprar un itinearario asignando a cada pasajero una silla sobre cada trayecto del itinerario");
 				System.out.println("AGENTES REGISTRADOS");
 				System.out.println("--------------------------------------------------");
 				if(sistemaVuelo.getAgentes() != null){
@@ -387,7 +404,7 @@ public class TestSistemaVuelos {
 			}
 			break;
 			case 10:{
-				System.out.println("Opción 10: Tiquete electrónico");
+				System.out.println("Tiquete electrónico");
 				System.out.println("AGENTES REGISTRADOS");
 				System.out.println("--------------------------------------------------");
 				if(sistemaVuelo.getAgentes() != null){
