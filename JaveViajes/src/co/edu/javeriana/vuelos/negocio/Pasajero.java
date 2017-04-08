@@ -1,12 +1,14 @@
 package co.edu.javeriana.vuelos.negocio;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pasajero {
-	private String identificacion;
-	private String nombre;
-	private List<Silla> sillas;
+public abstract class Pasajero {
+	protected String identificacion;
+	protected String nombre;
+	protected List<Silla> sillas;
+	protected LocalDate fechaNacimiento;
 	public Pasajero(String identificacion, String nombre) {
 		super();
 		this.identificacion = identificacion;
@@ -45,4 +47,5 @@ public class Pasajero {
 		}
 		this.sillas.add(silla);
 	}
+	public abstract long calcularValorItinerario();
 }

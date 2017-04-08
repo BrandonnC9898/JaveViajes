@@ -2,6 +2,7 @@ package co.edu.javeriana.vuelos.presentacion;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.StringTokenizer;
 
 public class Utils {
@@ -27,5 +28,8 @@ public class Utils {
 		int mes = Integer.parseInt(organizado2.nextToken());
 		int dia = Integer.parseInt(organizado2.nextToken());
 		return LocalDate.of(ano, mes, dia);
+	}
+	public static long obtenerEdad (LocalDate fechaNacimiento){
+		return LocalDate.now().until(fechaNacimiento, ChronoUnit.YEARS);
 	}
 }

@@ -4,14 +4,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VueloEspecifico {
+public abstract class VueloEspecifico {
 	private static long CONSECUTIVO = 0;
-	private long codigo;
-	private LocalDate fecha;
-	private String tipoAvion;
-	private int capacidad;
-	private int cuposLibres;
-	private long tarifa;
+	protected long codigo;
+	protected LocalDate fecha;
+	protected String tipoAvion;
+	protected int capacidad;
+	protected int cuposLibres;
+	//elimine esto private long tarifa;
+	protected long tarifaBasica;
 	private VueloPlaneado vueloPlaneado;
 	private List<Trayecto> trayectos;
 	private List<Silla> sillas;
@@ -24,7 +25,7 @@ public class VueloEspecifico {
 		this.tipoAvion = tipoAvion;
 		this.capacidad = capacidad;
 		this.cuposLibres = capacidad;
-		this.tarifa = tarifa;
+		this.tarifaBasica = tarifa;
 		this.vueloPlaneado = vueloPlaneado;
 		this.trayectos = null;
 		this.sillas = null;
@@ -67,10 +68,10 @@ public class VueloEspecifico {
 		this.cuposLibres = cuposLibres;
 	}
 	public long getTarifa() {
-		return tarifa;
+		return tarifaBasica;
 	}
 	public void setTarifa(long tarifa) {
-		this.tarifa = tarifa;
+		this.tarifaBasica = tarifa;
 	}
 	public VueloPlaneado getVueloPlaneado() {
 		return vueloPlaneado;
@@ -92,7 +93,7 @@ public class VueloEspecifico {
 	}
 	@Override
 	public String toString() {
-		return String.format("%d %s %s %d %d %d", codigo, fecha, tipoAvion, capacidad, cuposLibres, tarifa);
+		return String.format("%d %s %s %d %d %d", codigo, fecha, tipoAvion, capacidad, cuposLibres, tarifaBasica);
 	}
 	/**
 	 * crea sillas y les asigna un codigo
@@ -202,4 +203,8 @@ public class VueloEspecifico {
 		}
 		return null;
 	}
+	public long calcularNumPasajesMes(int mes){
+		return 0;
+	}
+	public abstract long calcularValorPasaje();
 }

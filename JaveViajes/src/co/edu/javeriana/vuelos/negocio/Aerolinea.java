@@ -96,9 +96,9 @@ public class Aerolinea {
 	 * @param tarifa
 	 * @return codigo del vuelo especifico creado
 	 */
-	public long crearVueloEspecifico(long codigoVP, LocalDate fecha, String tipoAvion, int capacidad, long tarifa){
+	public long crearVueloEspecifico(long codigoVP, LocalDate fecha, String tipoAvion, int capacidad, long tarifa, long valorAdicional, String tipo){
 		VueloPlaneado vueloPlaneado = this.vuelosPlaneados.get(this.buscarVueloPlaneado(codigoVP));
-		return vueloPlaneado.crearVueloEspecifico(fecha, tipoAvion, capacidad, tarifa);
+		return vueloPlaneado.crearVueloEspecifico(fecha, tipoAvion, capacidad, tarifa, valorAdicional, tipo);
 	}
 	/**
 	 * prepara los vuelos especificos que corresponden a los parametros

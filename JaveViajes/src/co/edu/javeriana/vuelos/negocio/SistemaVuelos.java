@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SistemaVuelos {
+public class SistemaVuelos implements ISistemaViajes{
 	private List<Aerolinea> aerolineas;
 	private List<Ciudad> ciudades;
 	private List<Agente> agentes;
@@ -172,9 +172,9 @@ public class SistemaVuelos {
 	 * @param tarifa
 	 * @return el codigo del vuelo especifico creado
 	 */
-	public long crearVueloEspecifico(long codigoA, long codigoVP, LocalDate fecha, String tipoAvion, int capacidad, long tarifa){
+	public long crearVueloEspecifico(long codigoA, long codigoVP, LocalDate fecha, String tipoAvion, int capacidad, long tarifa, long valorAdicional, String tipo){
 		Aerolinea aerolinea = this.aerolineas.get(this.buscarAerolinea(codigoA));
-		return aerolinea.crearVueloEspecifico(codigoVP, fecha, tipoAvion, capacidad, tarifa);
+		return aerolinea.crearVueloEspecifico(codigoVP, fecha, tipoAvion, capacidad, tarifa, valorAdicional,tipo);
 	}
 	/**
 	 * crea un itinerario, pero primero busca su agente
@@ -365,6 +365,17 @@ public class SistemaVuelos {
 		if(ret >= 0){
 			Agente agente = this.agentes.get(ret);
 			return agente.calcularValor(codItinerario);
+		}
+		return -1;
+	}
+	public int buscarItinerario(long codItinerario){
+		if(this.agentes.size() > 0){
+			for(Agente agente : this.agentes){
+				int valor = agente.buscarItinerario(codItinerario);
+				if(valor >= 0){
+					return valor;
+				}
+			}
 		}
 		return -1;
 	}

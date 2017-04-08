@@ -98,7 +98,7 @@ public class VueloPlaneado {
 	}
 	@Override
 	public String toString() {
-		return String.format("%d %s %s %s %s", codigo,numeroVuelo,diaSemana,horaSalida,horaLlegada);
+		return String.format("%d / %s / %s / %s / %s", codigo,numeroVuelo,diaSemana,horaSalida,horaLlegada);
 	}
 	/**
 	 * crea un vuelo especifico, y lo agrega a vuelos especificos
@@ -108,10 +108,18 @@ public class VueloPlaneado {
 	 * @param tarifa
 	 * @return codigo del vuelo especifico creado
 	 */
-	public long crearVueloEspecifico(LocalDate fecha, String tipoAvion, int capacidad, long tarifa){
-		VueloEspecifico vueloEspecifico = new VueloEspecifico(fecha,tipoAvion,capacidad,tarifa,this);
-		this.agregarVueloEspecifico(vueloEspecifico);
-		return vueloEspecifico.getCodigo();
+	public long crearVueloEspecifico(LocalDate fecha, String tipoAvion, int capacidad, long tarifaBasica, long valorAdicional, String tipo){
+		if(tipo.equals("nacional")){
+			VueloEspecifico vueloEspecifico = new VueloEspecificoNacional(fecha,tipoAvion,capacidad,tarifaBasica,this,(int)valorAdicional);
+			this.agregarVueloEspecifico(vueloEspecifico);
+			return vueloEspecifico.getCodigo();
+		}
+		else{
+			VueloEspecifico vueloEspecifico = new VueloEspecificoInternacional(fecha,tipoAvion,capacidad,tarifaBasica,this,valorAdicional);
+			this.agregarVueloEspecifico(vueloEspecifico);
+			return vueloEspecifico.getCodigo();
+		}
+		
 	}
 	public void agregarVueloEspecifico(VueloEspecifico vueloEspecifico){
 		if(this.vuelosEspecificos == null){

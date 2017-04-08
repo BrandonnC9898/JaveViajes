@@ -118,9 +118,6 @@ public class Itinerario {
 				if(trayecto.verificarCupo(cantP)){
 					retorno = true;
 				}
-				else{
-					return false;
-				}
 			}
 		}
 		return retorno;

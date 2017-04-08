@@ -49,5 +49,7 @@ public class Silla {
 	public String toString() {
 		return String.format("%s", id);
 	}
-	
+	public long calcularValorSilla(){
+		return this.vueloEspecifico.calcularValorPasaje();
+	}
 }
