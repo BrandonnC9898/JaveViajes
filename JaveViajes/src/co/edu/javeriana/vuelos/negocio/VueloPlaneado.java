@@ -98,7 +98,7 @@ public class VueloPlaneado {
 	}
 	@Override
 	public String toString() {
-		return String.format("%d / %s / %s / %s / %s", codigo,numeroVuelo,diaSemana,horaSalida,horaLlegada);
+		return String.format("%d \t %s \t %s \t %s \t %s", codigo,numeroVuelo,diaSemana,horaSalida,horaLlegada);
 	}
 	/**
 	 * crea un vuelo especifico, y lo agrega a vuelos especificos
@@ -121,10 +121,11 @@ public class VueloPlaneado {
 		}
 		
 	}
+	/**
+	 * Agrega un vuelo específico a su lista de vuelos específicos
+	 * @param vueloEspecifico
+	 */
 	public void agregarVueloEspecifico(VueloEspecifico vueloEspecifico){
-		if(this.vuelosEspecificos == null){
-			this.vuelosEspecificos = new ArrayList<VueloEspecifico>();
-		}
 		this.vuelosEspecificos.add(vueloEspecifico);
 	}
 	/**
@@ -133,7 +134,7 @@ public class VueloPlaneado {
 	 * @return posicion del vuelo especifico
 	 */
 	public int buscarVueloEspecifico(long codVE){
-		if(this.vuelosEspecificos != null){
+		if(!this.vuelosEspecificos.isEmpty()){
 			for(VueloEspecifico vueloEspecifico : this.vuelosEspecificos){
 				if(vueloEspecifico.getCodigo() == codVE){
 					return this.vuelosEspecificos.indexOf(vueloEspecifico);
@@ -151,22 +152,18 @@ public class VueloPlaneado {
 	 * @return si posee vuelos especificos correspondientes a los parametros
 	 */
 	public boolean mostrarVuelosEspecificosPedidos(LocalDate fecha, long codOrigen, long codDest, int pasajeros){
-		boolean retorno = false;
-		if(this.vuelosEspecificosPedidos != null){
+		if(!this.vuelosEspecificosPedidos.isEmpty()){
 			this.vuelosEspecificosPedidos.clear();
 		}
-		if(this.origen.getCodigo() == codOrigen && this.destino.getCodigo() == codDest && this.vuelosEspecificos != null){
+		if(this.origen.getCodigo() == codOrigen && this.destino.getCodigo() == codDest && !this.vuelosEspecificos.isEmpty()){
 			for(VueloEspecifico vueloEspecifico : this.vuelosEspecificos){
 				if(vueloEspecifico.getFecha().equals(fecha) && vueloEspecifico.getCuposLibres() >= pasajeros){
-					if(this.vuelosEspecificosPedidos == null){
-						this.vuelosEspecificosPedidos = new ArrayList<VueloEspecifico>();
-					}
 					this.vuelosEspecificosPedidos.add(vueloEspecifico);
-					retorno = true;
+					return true;
 				}
 			}
 		}
-		return retorno;
+		return false;
 	}
 	/**
 	 * crea un trayecto
@@ -174,7 +171,7 @@ public class VueloPlaneado {
 	 * @return trayecto creado
 	 */
 	public Trayecto crearTrayecto(long codVE){
-		return this.vuelosEspecificos.get(this.buscarVueloEspecifico(codVE)).crearTrayecto();
+		return (this.vuelosEspecificos.get(this.buscarVueloEspecifico(codVE))).crearTrayecto();
 	}
 
 }

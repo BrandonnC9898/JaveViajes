@@ -41,7 +41,7 @@ public class Agente {
 	}
 	@Override
 	public String toString() {
-		return String.format("%d %s %s", codigo, nombre, email);
+		return String.format("%d \t %s \t %s", codigo, nombre, email);
 	}
 	/**
 	 * crea un itinerario y lo agrega a itinerarios
@@ -53,10 +53,11 @@ public class Agente {
 		this.agregarItinerario(itinerario);
 		return itinerario.getCodigo();
 	}
+	/**
+	 * Agrega un itinerario a su lista de itinerarios
+	 * @param itinerario
+	 */
 	private void agregarItinerario(Itinerario itinerario){
-		if(this.itinerarios == null){
-			this.itinerarios = new ArrayList<Itinerario>();
-		}
 		this.itinerarios.add(itinerario);
 	}
 	/**
@@ -80,9 +81,9 @@ public class Agente {
 	 * @param identificacion
 	 * @param nombre
 	 */
-	public void crearPasajero(long codIt, String identificacion, String nombre){
+	public void crearPasajero(long codIt, String identificacion, String nombre, boolean tipo, boolean requiere){
 		Itinerario itinerario = this.itinerarios.get(this.buscarItinerario(codIt));
-		itinerario.crearPasajero(identificacion, nombre);
+		itinerario.crearPasajero(identificacion, nombre, tipo, requiere);
 	}
 	/**
 	 * 
@@ -90,7 +91,7 @@ public class Agente {
 	 * @return cantidad de pasajeros en un itinerario
 	 */
 	public int comprobarPasajeros(long codItinerario){
-		if(this.itinerarios != null){
+		if(!this.itinerarios.isEmpty()){
 			for(Itinerario itinerario : this.itinerarios){
 				if(itinerario.getCodigo() == codItinerario){
 					return itinerario.cantidadPasajeros();
@@ -120,7 +121,7 @@ public class Agente {
 	 * @param trayecto
 	 */
 	public void asociarTrayectoItinerario(long codItinerario, Trayecto trayecto){
-		if(this.itinerarios != null){
+		if(!this.itinerarios.isEmpty()){
 			if(this.buscarItinerario(codItinerario) >= 0){
 				Itinerario itinerario = this.itinerarios.get(this.buscarItinerario(codItinerario));
 				itinerario.asociarTrayectoItinerario(trayecto);
@@ -186,11 +187,11 @@ public class Agente {
 	 * @param codItinerario
 	 * @return valor del itinerario
 	 */
-	public long calcularValor(long codItinerario){
+	public long calcularValorItinerario(long codItinerario){
 		int ret = this.buscarItinerario(codItinerario);
 		if(ret >= 0){
 			Itinerario itinerario = this.itinerarios.get(ret);
-			return itinerario.calcularValor();
+			return itinerario.calcularValorItinerario();
 		}
 		return -1;
 	}

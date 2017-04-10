@@ -29,7 +29,12 @@ public class Utils {
 		int dia = Integer.parseInt(organizado2.nextToken());
 		return LocalDate.of(ano, mes, dia);
 	}
+	/**
+	 * Calcula la edad de una persona a partir de su fecha de nacimiento
+	 * @param fechaNacimiento
+	 * @return
+	 */
 	public static long obtenerEdad (LocalDate fechaNacimiento){
-		return LocalDate.now().until(fechaNacimiento, ChronoUnit.YEARS);
+		return fechaNacimiento.until(LocalDate.now(), ChronoUnit.YEARS);
 	}
 }

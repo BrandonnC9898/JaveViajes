@@ -18,8 +18,8 @@ public class Itinerario {
 		this.nombre = nombre;
 		this.comprado = false;
 		this.agente = agente;
-		this.trayectos = null;
-		this.pasajeros = null;
+		this.trayectos = new ArrayList<Trayecto>();
+		this.pasajeros = new ArrayList<Pasajero>();
 	}
 	public static long getCONSECUTIVO() {
 		return CONSECUTIVO;
@@ -65,21 +65,28 @@ public class Itinerario {
 	}
 	@Override
 	public String toString() {
-		return String.format("%d %s", codigo, nombre);
+		return String.format("%d \t %s", codigo, nombre);
 	}
 	/**
 	 * crea un pasajero y lo agrega a la lista de pasajeros
 	 * @param identificacion
 	 * @param nombre
 	 */
-	public void crearPasajero(String identificacion, String nombre){
-		Pasajero pasajero = new Pasajero(identificacion, nombre);
+	public void crearPasajero(String identificacion, String nombre, boolean tipo, boolean requiere){
+		Pasajero pasajero;
+		if(tipo){
+			pasajero = new Mayor(identificacion, nombre, requiere);
+		}
+		else{
+			pasajero = new Menor(identificacion, nombre, requiere);
+		}
 		this.agregarPasajero(pasajero);
 	}
+	/**
+	 * Agrega un pasajero a su lista de pasajeros
+	 * @param pasajero
+	 */
 	private void agregarPasajero(Pasajero pasajero){
-		if(this.pasajeros == null){
-			this.pasajeros = new ArrayList<Pasajero>();
-		}
 		this.pasajeros.add(pasajero);
 	}
 	/**
@@ -101,9 +108,6 @@ public class Itinerario {
 	 * @param trayecto
 	 */
 	public void asociarTrayectoItinerario(Trayecto trayecto){
-		if(this.trayectos == null){
-			this.trayectos = new ArrayList<Trayecto>();
-		}
 		this.trayectos.add(trayecto);
 	}
 	/**
@@ -112,11 +116,14 @@ public class Itinerario {
 	 */
 	public boolean verificarCupo(){
 		boolean retorno = false;
-		if(this.trayectos != null){
+		if(!this.trayectos.isEmpty()){
 			int cantP = this.cantidadPasajeros();
 			for(Trayecto trayecto : this.trayectos){
 				if(trayecto.verificarCupo(cantP)){
 					retorno = true;
+				}
+				else{
+					return false;
 				}
 			}
 		}
@@ -147,7 +154,7 @@ public class Itinerario {
 		if(ret >= 0){
 			Trayecto trayecto = this.trayectos.get(ret);
 			for(Pasajero pasajero : this.pasajeros){
-				if(pasajero.getSillas() == null){
+				if(pasajero.getSillas().isEmpty()){
 					Silla si = trayecto.marcarSilla(silla, pasajero);
 					pasajero.agregarSilla(si);
 					break;
@@ -159,11 +166,11 @@ public class Itinerario {
 	 * calcula el valor del itinerario
 	 * @return
 	 */
-	public long calcularValor(){
-		if(this.trayectos != null){
+	public long calcularValorItinerario(){
+		if(!this.pasajeros.isEmpty()){
 			long valor = 0 ;
-			for(Trayecto trayecto : this.trayectos){
-				valor = trayecto.calcularValor() + valor;
+			for(Pasajero pasajero : this.pasajeros){
+				valor = pasajero.calcularValorItinerario() + valor;
 			}
 			return valor;
 		}

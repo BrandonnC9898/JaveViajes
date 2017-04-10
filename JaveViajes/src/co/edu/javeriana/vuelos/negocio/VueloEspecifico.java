@@ -27,8 +27,8 @@ public abstract class VueloEspecifico {
 		this.cuposLibres = capacidad;
 		this.tarifaBasica = tarifa;
 		this.vueloPlaneado = vueloPlaneado;
-		this.trayectos = null;
-		this.sillas = null;
+		this.trayectos = new ArrayList<Trayecto>();
+		this.sillas = new ArrayList<Silla>();
 		this.crearSillas(capacidad);
 	}
 	public static long getCONSECUTIVO() {
@@ -93,7 +93,7 @@ public abstract class VueloEspecifico {
 	}
 	@Override
 	public String toString() {
-		return String.format("%d %s %s %d %d %d", codigo, fecha, tipoAvion, capacidad, cuposLibres, tarifaBasica);
+		return String.format("%d \t %s \t %s \t %d \t %d \t %d", codigo, fecha, tipoAvion, capacidad, cuposLibres, tarifaBasica);
 	}
 	/**
 	 * crea sillas y les asigna un codigo
@@ -102,7 +102,6 @@ public abstract class VueloEspecifico {
 	private void crearSillas(int capacidad){
 		int ii = 1;
 		int iii = 1;
-		this.sillas = new ArrayList<Silla>();
 		for(int i = 1; i <= capacidad; i++){
 			String id = "";
 			switch(ii){
@@ -203,8 +202,9 @@ public abstract class VueloEspecifico {
 		}
 		return null;
 	}
-	public long calcularNumPasajesMes(int mes){
-		return 0;
-	}
+	/**
+	 * Calcula el valor de un pasaje en el vuelo específico
+	 * @return
+	 */
 	public abstract long calcularValorPasaje();
 }

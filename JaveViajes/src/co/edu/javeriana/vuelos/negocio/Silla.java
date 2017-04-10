@@ -49,6 +49,10 @@ public class Silla {
 	public String toString() {
 		return String.format("%s", id);
 	}
+	/**
+	 * calcula el valor de una silla, dependiendo del vuelo específico
+	 * @return
+	 */
 	public long calcularValorSilla(){
 		return this.vueloEspecifico.calcularValorPasaje();
 	}

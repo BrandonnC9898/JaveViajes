@@ -15,7 +15,9 @@ public class Mayor extends Pasajero{
 		super(identificacion, nombre);
 		this.requiereAsistencia = requiereAsistencia;
 	}
-
+	/**
+	 * Calcula el valor de un itinerario tomando en cuenta que es un pasajero mayor de 12 años
+	 */
 	public long calcularValorItinerario() {
 		long valorItinerario = 0;
 		for(Silla silla : this.sillas){

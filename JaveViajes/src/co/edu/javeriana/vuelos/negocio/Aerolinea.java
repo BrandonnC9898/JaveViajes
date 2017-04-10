@@ -52,7 +52,7 @@ public class Aerolinea {
 	}
 	@Override
 	public String toString() {
-		return String.format("%d %s %s", codigo, nombre,cuentaBanco);
+		return String.format("%d \t %s \t %s", codigo, nombre,cuentaBanco);
 	}
 	/**
 	 * crea un vuelo planeado y lo agrega a vuelos planeados
@@ -68,7 +68,10 @@ public class Aerolinea {
 		VueloPlaneado nuevoVP = new VueloPlaneado(codigo, numeroVuelo, diaSemana, horaSalida, horaLlegada, this, origen, destino);
 		this.agregarVueloPlaneado(nuevoVP);
 	}
-	//eliminé la parte que verifica si la lista es null
+	/**
+	 * Agrega un vuelo crado a su lista de vuelos
+	 * @param nuevoVP
+	 */
 	public void agregarVueloPlaneado(VueloPlaneado nuevoVP){
 		this.vuelosPlaneados.add(nuevoVP);
 	}
@@ -109,22 +112,18 @@ public class Aerolinea {
 	 * @return si contiene vuelos especificos correspondientes a los parametros
 	 */
 	public boolean mostrarVuelosEspecificosPedidos(LocalDate fecha, long codOrigen, long codDest, int pasajeros){
-		boolean retorno = false;
-		if(this.vuelosPlaneadosPedidos != null){
+		if(!this.vuelosPlaneadosPedidos.isEmpty()){
 			this.vuelosPlaneados.clear();
 		}
-		if(this.vuelosPlaneados != null){
+		if(!this.vuelosPlaneados.isEmpty()){
 			for(VueloPlaneado vueloPlaneado : this.vuelosPlaneados){
 				if(vueloPlaneado.mostrarVuelosEspecificosPedidos(fecha, codOrigen, codDest, pasajeros)){
-					if(this.vuelosPlaneadosPedidos == null){
-						this.vuelosPlaneadosPedidos = new ArrayList<VueloPlaneado>();
-					}
 					this.vuelosPlaneadosPedidos.add(vueloPlaneado);
-					retorno = true;
+					return true;
 				}
 			}
 		}
-		return retorno;
+		return false;
 	}
 	/**
 	 * crea un trayecto
@@ -133,7 +132,7 @@ public class Aerolinea {
 	 */
 	public Trayecto crearTrayecto(long codVE){
 		Trayecto trayecto = null;
-		if(this.vuelosPlaneados != null){
+		if(!this.vuelosPlaneados.isEmpty()){
 			for(VueloPlaneado vueloPlaneado : this.vuelosPlaneados){
 				if(vueloPlaneado.buscarVueloEspecifico(codVE) >= 0){
 					trayecto = vueloPlaneado.crearTrayecto(codVE);

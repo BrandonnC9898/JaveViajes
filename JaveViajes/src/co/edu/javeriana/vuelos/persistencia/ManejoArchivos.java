@@ -8,7 +8,7 @@ import java.time.LocalTime;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-import co.edu.javeriana.vuelos.negocio.SistemaVuelos;
+import co.edu.javeriana.vuelos.negocio.ISistemaViajes;
 import co.edu.javeriana.vuelos.presentacion.Utils;
 
 public class ManejoArchivos {
@@ -18,7 +18,7 @@ public class ManejoArchivos {
 	 * @param sistemaVuelo
 	 * @return si se pudo o no leer los datos 
 	 */
-	public static boolean leerCiudad (String nombreArchivo, SistemaVuelos sistemaVuelo){
+	public static boolean leerCiudad (String nombreArchivo, ISistemaViajes sistemaVuelo){
 		boolean retorno = false;
 		File ciudadArchivo = new File("./"+nombreArchivo);
 		FileInputStream tubo = null;
@@ -62,7 +62,7 @@ public class ManejoArchivos {
 	 * @return si se pudo o no leer los datos 
 	 */
 	//arregle los tipos de dato (int-long)
-	public static boolean ingresarAerolinea (String nombreArchivo, SistemaVuelos sistemaVuelo){
+	public static boolean ingresarAerolinea (String nombreArchivo, ISistemaViajes sistemaVuelo){
 		boolean retorno = false;
 		File aerolineaArchivo = new File("./"+nombreArchivo);
 		FileInputStream tubo = null;
@@ -130,7 +130,7 @@ public class ManejoArchivos {
 	 * @param sistemaVuelo
 	 * @return si se pudo o no leer los datos 
 	 */
-	public static boolean ingresarAgente (String nombreArchivo, SistemaVuelos sistemaVuelo){
+	public static boolean ingresarAgente (String nombreArchivo, ISistemaViajes sistemaVuelo){
 		boolean retorno = false;
 		File ciudadArchivo = new File("./"+nombreArchivo);
 		FileInputStream tubo = null;

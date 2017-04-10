@@ -18,7 +18,9 @@ public class VueloEspecificoInternacional extends VueloEspecifico{
 		super(fecha, tipoAvion, capacidad, tarifa, vueloPlaneado);
 		this.impuestoSalida = impuestoSalida;
 	}
-
+	/**
+	 * Calcula el valor de un pasaje en el vuelo específico tomando en cuenta que es Internacional
+	 */
 	public long calcularValorPasaje() {
 		if(this.fecha.getMonthValue() == 12 || this.fecha.getMonthValue() == 6){
 			return (long) (this.tarifaBasica*0.2)+this.tarifaBasica+this.impuestoSalida;

@@ -50,7 +50,10 @@ public class SistemaVuelos implements ISistemaViajes{
 		Ciudad nuevaCiudad = new Ciudad(codigo, nombreCiudad);
 		this.agregarCiudad(nuevaCiudad);
 	}
-	//quite el que revisaba si lista de ciudades era null
+	/**
+	 * Agrega una ciudad a su lista de ciudades
+	 * @param ciudad
+	 */
 	private void agregarCiudad(Ciudad ciudad){
 		this.ciudades.add(ciudad);
 	}
@@ -64,7 +67,10 @@ public class SistemaVuelos implements ISistemaViajes{
 		Aerolinea nuevaAerolinea = new Aerolinea(codigo, nombre, cuentaBanco);
 		this.agregarAerolinea(nuevaAerolinea);
 	}
-	//quite el que revisaba si lista de aerolineas era null
+	/**
+	 * agrega una aerolinea a su lista de aerolineas
+	 * @param nuevaAerolinea
+	 */
 	private void agregarAerolinea(Aerolinea nuevaAerolinea){
 		this.aerolineas.add(nuevaAerolinea);
 	}
@@ -73,7 +79,6 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @param codigoReal
 	 * @return la posicion de la aerolinea 
 	 */
-	//corregí el else que retornaba -1
 	public int buscarAerolinea(long codigoReal){
 		if(!this.aerolineas.isEmpty()){
 			for(Aerolinea aerolinea : this.aerolineas){
@@ -114,7 +119,6 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @param origen
 	 * @param destino
 	 */
-	//falta agregar un retorno, por si no encuentra la aerolínea
 	public void agregarVueloPlaneado(long aerolinea, long codigo, String numeroVuelo, String diaSemana, LocalTime horaSalida, LocalTime horaLlegada, long origen, long destino){
 		Ciudad orig = this.buscarCiudad(origen);
 		Ciudad dest = this.buscarCiudad(destino);
@@ -143,7 +147,10 @@ public class SistemaVuelos implements ISistemaViajes{
 		Agente nuevoAgente = new Agente(codigo, nombre, email);
 		this.agregarAgente(nuevoAgente);
 	}
-	//cambie la revisión de null
+	/**
+	 * Agrega un agente a su lista de agentes
+	 * @param nuevoAgente
+	 */
 	private void agregarAgente(Agente nuevoAgente){
 		this.agentes.add(nuevoAgente);
 	}
@@ -153,7 +160,7 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @return la posicion del agente 
 	 */
 	public int buscarAgente(long codigoAg){
-		if(this.agentes != null){
+		if(!this.agentes.isEmpty()){
 			for(Agente agente : this.agentes){
 				if(agente.getCodigo() == codigoAg){
 					return this.agentes.indexOf(agente);
@@ -183,7 +190,7 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @return el codigo del itinerario creado
 	 */
 	public long crearItinerario(long codigoAgente, String nombre){
-		if(this.agentes != null){
+		if(!this.agentes.isEmpty()){
 			return this.agentes.get(this.buscarAgente(codigoAgente)).crearItinerario(nombre);
 		}
 		return -1;
@@ -195,8 +202,8 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @param identificacion
 	 * @param nombre
 	 */
-	public void crearPasajero(long codAg, long codIt, String identificacion, String nombre){
-		this.agentes.get(this.buscarAgente(codAg)).crearPasajero(codIt, identificacion, nombre);
+	public void crearPasajero(long codAg, long codIt, String identificacion, String nombre, boolean tipo, boolean requiere){
+		this.agentes.get(this.buscarAgente(codAg)).crearPasajero(codIt, identificacion, nombre, tipo, requiere);
 	}
 	/**
 	 * se encarga de preparar los vuelos especificos que concuerdan con los parametros
@@ -208,30 +215,26 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @return si exite un vuelo especifico que concuerda
 	 */
 	public boolean mostrarVuelosEspecificosPedidos(long codAgente, long codItinerario, long codOrigen, long codDest, LocalDate fecha){
-		boolean retorno = false;
-		if(this.aerolineasPedidas != null){
+		if(!this.aerolineasPedidas.isEmpty()){
 			this.aerolineasPedidas.clear();
 		}
-		if(this.ciudades != null){
+		if(!this.ciudades.isEmpty()){
 			if(this.buscarCiudad(codDest) != null){
-				if(this.aerolineas != null){
-					if(this.agentes != null && this.aerolineas != null){
+				if(!this.aerolineas.isEmpty()){
+					if(!this.agentes.isEmpty() && !this.aerolineas.isEmpty()){
 						Agente agente = this.agentes.get(this.buscarAgente(codAgente));
 						int cantiPasajeros = agente.comprobarPasajeros(codItinerario);
 						for(Aerolinea aerolinea : this.aerolineas){
 							if(aerolinea.mostrarVuelosEspecificosPedidos(fecha, codOrigen, codDest,cantiPasajeros)){
-								if(this.aerolineasPedidas == null){
-									this.aerolineasPedidas = new ArrayList<Aerolinea>();
-								}
 								this.aerolineasPedidas.add(aerolinea);
-								retorno = true;
+								return true;
 							}
 						}
 					}
 				}
 			}
 		}
-		return retorno;
+		return false;
 	}
 	/**
 	 * Crea un trayecto
@@ -239,7 +242,7 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @param codVE
 	 */
 	public void crearTrayecto(long codAg, long codVE){
-		if(this.aerolineas != null){
+		if(!this.aerolineas.isEmpty()){
 			for(Aerolinea aerolinea : this.aerolineas){
 				Trayecto trayecto = aerolinea.crearTrayecto(codVE);
 				if(trayecto != null){
@@ -255,7 +258,7 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @param trayecto
 	 */
 	private void asociarTrayectoItinerario(long codAgente, long codItinerario, Trayecto trayecto){
-		if(this.agentes != null){
+		if(!this.agentes.isEmpty()){
 			if(this.buscarAgente(codAgente) >= 0){
 				Agente agente = this.agentes.get(this.buscarAgente(codAgente));
 				agente.asociarTrayectoItinerario(codItinerario, trayecto);
@@ -269,7 +272,7 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @return si hay cupo disponible en el itinerario
 	 */
 	public boolean verificarCupo(long codAgente, long codItinerario){
-		if(this.agentes != null){
+		if(!this.agentes.isEmpty()){
 			int ret = this.buscarAgente(codAgente);
 			if(ret >= 0){
 				Agente agente = this.agentes.get(ret);
@@ -299,7 +302,7 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @return cantidad de pasajeros asociados al itinerario
 	 */
 	public int pasajerosItinerario(long codAgente,long codItinerario){
-		if(this.agentes != null){
+		if(!this.agentes.isEmpty()){
 			int ret = this.buscarAgente(codAgente);
 			if(ret >= 0){
 				Agente agente = this.agentes.get(ret);
@@ -315,7 +318,7 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @return cantidad de trayectos en el itinerario señalado
 	 */
 	public int cantiTrayectos(long codAgente,long codItinerario){
-		if(this.agentes != null){
+		if(!this.agentes.isEmpty()){
 			int ret = this.buscarAgente(codAgente);
 			if(ret >= 0){
 				Agente agente = this.agentes.get(ret);
@@ -332,7 +335,7 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @param silla
 	 */
 	public void marcarSilla(long codAgente, long codItinerario, long idTrayecto, String silla){
-		if(this.agentes != null){
+		if(!this.agentes.isEmpty()){
 			int ret = this.buscarAgente(codAgente);
 			if(ret >= 0){
 				Agente agente = this.agentes.get(ret);
@@ -360,16 +363,19 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @param codItinerario
 	 * @return valor del itinerario 
 	 */
-	public long calcularValor(long codAgente, long codItinerario){
+	public long calcularValorItinerario(long codAgente, long codItinerario){
 		int ret = this.buscarAgente(codAgente);
 		if(ret >= 0){
 			Agente agente = this.agentes.get(ret);
-			return agente.calcularValor(codItinerario);
+			return agente.calcularValorItinerario(codItinerario);
 		}
 		return -1;
 	}
+	/**
+	 * Busca un Itinerario por su código
+	 */
 	public int buscarItinerario(long codItinerario){
-		if(this.agentes.size() > 0){
+		if(!this.agentes.isEmpty()){
 			for(Agente agente : this.agentes){
 				int valor = agente.buscarItinerario(codItinerario);
 				if(valor >= 0){

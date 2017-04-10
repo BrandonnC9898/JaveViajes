@@ -13,7 +13,7 @@ public abstract class Pasajero {
 		super();
 		this.identificacion = identificacion;
 		this.nombre = nombre;
-		this.sillas = null;
+		this.sillas = new ArrayList<Silla>();
 	}
 	public String getIdentificacion() {
 		return identificacion;
@@ -42,10 +42,11 @@ public abstract class Pasajero {
 	 * @param silla
 	 */
 	public void agregarSilla(Silla silla){
-		if(this.sillas == null){
-			this.sillas = new ArrayList<Silla>();
-		}
 		this.sillas.add(silla);
 	}
+	/**
+	 * calcula el valor de un itinerario
+	 * @return
+	 */
 	public abstract long calcularValorItinerario();
 }

@@ -16,7 +16,7 @@ public class Trayecto {
 		this.id = CONSECUTIVO;
 		this.vueloEspecifico = vueloEspecifico;
 		this.itinerario = itinerario;
-		this.sillas = null;
+		this.sillas = new ArrayList<Silla>();
 	}
 	public int getCONSECUTIVO() {
 		return CONSECUTIVO;
@@ -83,24 +83,11 @@ public class Trayecto {
 		this.marcarSilla(si);
 		return si;
 	}
-	private void marcarSilla(Silla silla){
-		if(this.sillas == null){
-			this.sillas = new ArrayList<Silla>();
-		}
-		this.sillas.add(silla);
-	}
 	/**
-	 * 
-	 * @return el valor del trayecto
+	 * Agrega una silla a su lisa de sillas
+	 * @param silla
 	 */
-	public long calcularValor(){
-		if(this.vueloEspecifico != null){
-			long silla = 0;
-			if(this.sillas != null){
-				silla = this.sillas.size();
-			}
-			return this.vueloEspecifico.getTarifa()*silla;
-		}
-		return -1;
+	private void marcarSilla(Silla silla){
+		this.sillas.add(silla);
 	}
 }
