@@ -385,4 +385,14 @@ public class SistemaVuelos implements ISistemaViajes{
 		}
 		return -1;
 	}
+	public int buscarAerolinea(String nombre){
+		if(!this.aerolineas.isEmpty()){
+			for(Aerolinea aerolinea : this.aerolineas){
+				if(aerolinea.getNombre() == nombre){
+					return this.aerolineas.indexOf(aerolinea);
+				}
+			}
+		}
+		return -1;
+	}
 }

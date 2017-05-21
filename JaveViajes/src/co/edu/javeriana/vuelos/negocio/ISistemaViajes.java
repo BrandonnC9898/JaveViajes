@@ -35,4 +35,5 @@ public interface ISistemaViajes {
 	int cantiTrayectos(long codAgente,long codItinerario);
 	void marcarSilla(long codAgente, long codItinerario, long idTrayecto, String silla);
 	boolean comprobarItinerario(long codAgente, long codItinerario);
+	int buscarAerolinea(String nombre);
 }
