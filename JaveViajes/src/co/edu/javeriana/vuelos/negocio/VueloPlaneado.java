@@ -173,5 +173,18 @@ public class VueloPlaneado {
 	public Trayecto crearTrayecto(long codVE){
 		return (this.vuelosEspecificos.get(this.buscarVueloEspecifico(codVE))).crearTrayecto();
 	}
-
+	public boolean mostrarVuelosEspecificosPedidos(LocalDate fecha, long codOrigen, long codDest){
+		if(!this.vuelosEspecificosPedidos.isEmpty()){
+			this.vuelosEspecificosPedidos.clear();
+		}
+		if(this.origen.getCodigo() == codOrigen && this.destino.getCodigo() == codDest && !this.vuelosEspecificos.isEmpty()){
+			for(VueloEspecifico vueloEspecifico : this.vuelosEspecificos){
+				if(vueloEspecifico.getFecha().equals(fecha)){
+					this.vuelosEspecificosPedidos.add(vueloEspecifico);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

@@ -141,5 +141,19 @@ public class Aerolinea {
 		}
 		return trayecto;
 	}
+	public boolean mostrarVuelosEspecificosPedidos(LocalDate fecha, long codOrigen, long codDest){
+		if(!this.vuelosPlaneadosPedidos.isEmpty()){
+			this.vuelosPlaneados.clear();
+		}
+		if(!this.vuelosPlaneados.isEmpty()){
+			for(VueloPlaneado vueloPlaneado : this.vuelosPlaneados){
+				if(vueloPlaneado.mostrarVuelosEspecificosPedidos(fecha, codOrigen, codDest)){
+					this.vuelosPlaneadosPedidos.add(vueloPlaneado);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
 

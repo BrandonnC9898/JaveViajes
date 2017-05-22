@@ -36,4 +36,7 @@ public interface ISistemaViajes {
 	void marcarSilla(long codAgente, long codItinerario, long idTrayecto, String silla);
 	boolean comprobarItinerario(long codAgente, long codItinerario);
 	int buscarAerolinea(String nombre);
+	int buscarAgente(String nombre);
+	public boolean mostrarVuelosEspecificosPedidos(long codOrigen, long codDest, LocalDate fecha);
+	public int buscarCiudad(String nombre);
 }

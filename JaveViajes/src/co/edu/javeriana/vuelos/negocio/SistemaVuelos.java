@@ -395,4 +395,42 @@ public class SistemaVuelos implements ISistemaViajes{
 		}
 		return -1;
 	}
+	public int buscarAgente(String nombre){
+		if(!this.agentes.isEmpty()){
+			for(Agente agente : this.agentes){
+				if(agente.getNombre() == nombre){
+					return this.agentes.indexOf(agente);
+				}
+			}
+		}
+		return -1;
+	}
+	public boolean mostrarVuelosEspecificosPedidos(long codOrigen, long codDest, LocalDate fecha){
+		if(!this.aerolineasPedidas.isEmpty()){
+			this.aerolineasPedidas.clear();
+		}
+		if(!this.ciudades.isEmpty()){
+			if(this.buscarCiudad(codDest) != null){
+				if(!this.aerolineas.isEmpty()){
+					if(!this.aerolineas.isEmpty()){
+						for(Aerolinea aerolinea : this.aerolineas){
+							if(aerolinea.mostrarVuelosEspecificosPedidos(fecha, codOrigen, codDest)){
+								this.aerolineasPedidas.add(aerolinea);
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	public int buscarCiudad(String nombre){
+		for(Ciudad ciudad:this.ciudades){
+			if(ciudad.getNombre() == nombre){
+				return this.ciudades.indexOf(ciudad);
+			}
+		}
+		return -1;
+	}
 }
