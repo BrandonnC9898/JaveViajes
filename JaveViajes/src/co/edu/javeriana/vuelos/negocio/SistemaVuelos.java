@@ -47,8 +47,10 @@ public class SistemaVuelos implements ISistemaViajes{
 	 * @param codigo
 	 */
 	public void crearCiudad(String nombreCiudad,int codigo){
-		Ciudad nuevaCiudad = new Ciudad(codigo, nombreCiudad);
-		this.agregarCiudad(nuevaCiudad);
+		if(this.buscarCiudad(codigo) == null){
+			Ciudad nuevaCiudad = new Ciudad(codigo, nombreCiudad);
+			this.agregarCiudad(nuevaCiudad);
+		}
 	}
 	/**
 	 * Agrega una ciudad a su lista de ciudades
@@ -432,5 +434,22 @@ public class SistemaVuelos implements ISistemaViajes{
 			}
 		}
 		return -1;
+	}
+	public boolean crearTrayecto(long codAgente, long codVE, long codItinerario){
+		boolean retorno = false;
+		if(!this.agentes.isEmpty()){
+			Agente agente = this.agentes.get(this.buscarAgente(codAgente));
+			int cantiPasajeros = agente.comprobarPasajeros(codItinerario);
+			if(!this.aerolineas.isEmpty()){
+				for(Aerolinea aerolinea : this.aerolineas){
+					Trayecto trayecto = aerolinea.crearTrayecto(codVE, cantiPasajeros);
+					if(trayecto != null){
+						this.asociarTrayectoItinerario(codAgente, codVE,trayecto);
+						retorno = true;
+					}
+				}
+			}
+		}
+		return retorno;
 	}
 }

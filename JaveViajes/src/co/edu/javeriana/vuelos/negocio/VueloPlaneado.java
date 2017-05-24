@@ -187,4 +187,7 @@ public class VueloPlaneado {
 		}
 		return false;
 	}
+	public Trayecto crearTrayecto(long codVE, int cantiPasajeros){
+		return (this.vuelosEspecificos.get(this.buscarVueloEspecifico(codVE))).crearTrayecto();
+	}
 }

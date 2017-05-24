@@ -60,6 +60,8 @@ public class TestGUISistemaViajes extends JFrame {
 	private JComboBox comboAno;
 	private JComboBox comboDia;
 	private JComboBox comboMes;
+	private final int CANTIDADANOS = 200;
+	private final int ANOBASENACIMIENTO = 1900;
 	private JComboBox<String> comboTipoA;
 	private JTextField txtCapacidad;
 	private JTextField txtTarifa;
@@ -83,7 +85,7 @@ public class TestGUISistemaViajes extends JFrame {
 	private JComboBox<String> comboAgentes_1 = new JComboBox<String>();
 	private JComboBox<String> comboItinerarios = new JComboBox<String>();
 	private JPanel agregarTrayectoItinerario;
-	private String[] columNames2 = {"Código", "Aerolinea", "Número vuelo", "Hora salida/llegada", "Origen", "Destino"};
+	private String[] columNames2 = {"Código", "Aerolinea", "Número vuelo", "Hora salida/llegada", "cupos libres", "tarifa", "tipo", "IVA/Impuesto salida"};
 	private Vector columNamesV2;
 	private Vector rowData2;
 	private JScrollPane scrollPaneTrayectos;
@@ -239,10 +241,11 @@ public class TestGUISistemaViajes extends JFrame {
 		lblNewLabel.setBounds(10, 11, 280, 14);
 		agregarVueloEspecifico.add(lblNewLabel);
 
+		List<Aerolinea> aerolineasImpresasVuelosPlaneados = new ArrayList<Aerolinea>();
 		JButton btnMostrarVuelosPlaneados = new JButton("Mostrar vuelos planeados");
 		btnMostrarVuelosPlaneados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mostrarVuelosPlaneados(e);
+				mostrarVuelosPlaneados(e, aerolineasImpresasVuelosPlaneados);
 			}
 		});
 		btnMostrarVuelosPlaneados.setBounds(226, 36, 198, 23);
@@ -317,7 +320,7 @@ public class TestGUISistemaViajes extends JFrame {
 		agregarVueloEspecifico.add(comboTipoV);
 
 
-		comboAno = new JComboBox(generarAno());
+		comboAno = new JComboBox(generarAnoActual());
 		comboAno.setBounds(226, 241, 64, 20);
 		agregarVueloEspecifico.add(comboAno);
 
@@ -520,7 +523,7 @@ public class TestGUISistemaViajes extends JFrame {
 		JButton btnRegistrarTrayecto = new JButton("Registrar trayecto");
 		btnRegistrarTrayecto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				registrarTrayecto(e);
 			}
 		});
 		btnRegistrarTrayecto.setBounds(115, 348, 139, 23);
@@ -535,6 +538,10 @@ public class TestGUISistemaViajes extends JFrame {
 		btnRegresar_2.setBounds(332, 348, 110, 23);
 		agregarTrayectoItinerario.add(btnRegresar_2);
 	}
+	private void jdialog(String mensaje){
+		MensajeJDialog jdialog = new MensajeJDialog(mensaje);
+		jdialog.setVisible(true);
+	}
 	private void IngresarDatos(ActionEvent e){
 		tabbedPane.setSelectedIndex(1);
 	}
@@ -542,17 +549,18 @@ public class TestGUISistemaViajes extends JFrame {
 		JFileChooser chooser = new JFileChooser("./");
 		int retorno = chooser.showSaveDialog(this);
 		if(retorno == JFileChooser.APPROVE_OPTION){
-			//String pathArchivo = chooser.getSelectedFile().getParent();
 			String nombreArchivo = chooser.getSelectedFile().getName();
 			boolean LeCiudad = ManejoArchivos.leerCiudad(nombreArchivo, sistemaVuelo);
 			if(LeCiudad){
-				JOptionPane.showMessageDialog(this, "Datos leídos con éxito","Informacion", JOptionPane.WARNING_MESSAGE);
+				//JOptionPane.showMessageDialog(this, "Datos leídos con éxito","Informacion", JOptionPane.WARNING_MESSAGE);
+				jdialog("Ciudades leídas");
 				agregarNombreCiudades(comboOrigen);
 				agregarNombreCiudades(comboDestino);
 				agregarTrayectoItinerario.add(comboOrigen);
 				agregarTrayectoItinerario.add(comboDestino);
 			}else{
-				JOptionPane.showConfirmDialog(this, "Error en la lectura de archivos", "Problema", JOptionPane.ERROR_MESSAGE);
+				//JOptionPane.showConfirmDialog(this, "Error en la lectura de archivos", "Problema", JOptionPane.ERROR_MESSAGE);
+				jdialog("Error");
 			}
 		}
 	}
@@ -563,12 +571,14 @@ public class TestGUISistemaViajes extends JFrame {
 			String nombreArchivo = chooser.getSelectedFile().getName();
 			boolean LeCiudad = ManejoArchivos.ingresarAerolinea(nombreArchivo, sistemaVuelo);
 			if(LeCiudad){
-				JOptionPane.showMessageDialog(this, "Datos leídos con éxito","Informacion", JOptionPane.WARNING_MESSAGE);
+				//JOptionPane.showMessageDialog(this, "Datos leídos con éxito","Informacion", JOptionPane.WARNING_MESSAGE);
 				//comboAerolineas.setBounds(226, 8, 198, 20);
+				jdialog("Aerolineas leídas");
 				agregarNombreAerolineas();
 				agregarVueloEspecifico.add(comboAerolineas);
 			}else{
-				JOptionPane.showConfirmDialog(this, "Error en la lectura de archivos", "Problema", JOptionPane.ERROR_MESSAGE);
+				//JOptionPane.showConfirmDialog(this, "Error en la lectura de archivos", "Problema", JOptionPane.ERROR_MESSAGE);
+				jdialog("Error");
 			}
 		}
 	}
@@ -579,11 +589,15 @@ public class TestGUISistemaViajes extends JFrame {
 			String nombreArchivo = chooser.getSelectedFile().getName();
 			boolean LeCiudad = ManejoArchivos.ingresarAgente(nombreArchivo, sistemaVuelo);
 			if(LeCiudad){
-				JOptionPane.showMessageDialog(this, "Datos leídos con éxito","Informacion", JOptionPane.WARNING_MESSAGE);
-				agregarNombreAgentes();
+				//JOptionPane.showMessageDialog(this, "Datos leídos con éxito","Informacion", JOptionPane.WARNING_MESSAGE);
+				jdialog("Agentes leídos");
+				agregarNombreAgentes(comboAgentes);
+				agregarNombreAgentes(comboAgentes_1);
 				agregarItinerario.add(comboAgentes);
+				agregarTrayectoItinerario.add(comboAgentes_1);
 			}else{
-				JOptionPane.showConfirmDialog(this, "Error en la lectura de archivos", "Problema", JOptionPane.ERROR_MESSAGE);
+				//JOptionPane.showConfirmDialog(this, "Error en la lectura de archivos", "Problema", JOptionPane.ERROR_MESSAGE);
+				jdialog("Error");
 			}
 		}
 	}
@@ -604,9 +618,15 @@ public class TestGUISistemaViajes extends JFrame {
 			return null;
 		}
 	}
-	private void mostrarVuelosPlaneados(ActionEvent e){
+	private void mostrarVuelosPlaneados(ActionEvent e, List<Aerolinea>aerolineasImpresasVuelosPlaneados){
+		boolean bandera = false;
 		Aerolinea aerolinea = aerolineaEnCombo();
-		if(aerolinea != null){
+		for(Aerolinea aerolineaI : aerolineasImpresasVuelosPlaneados){
+			if(aerolineaI.getCodigo() == aerolinea.getCodigo()){
+				bandera = true;
+			}
+		}
+		if(aerolinea != null && !bandera){
 			for(VueloPlaneado vueloPlaneado : aerolinea.getVuelosPlaneados()){
 				Vector fila = new Vector();
 				fila.add(vueloPlaneado.getCodigo());
@@ -619,6 +639,7 @@ public class TestGUISistemaViajes extends JFrame {
 			}
 			tableVuelosP = new JTable(rowData, columNamesV);
 			scrollPaneaVuelosP.setViewportView(tableVuelosP);
+			aerolineasImpresasVuelosPlaneados.add(aerolinea);
 		}
 	}
 	private void agregarVueloEsp(ActionEvent e){
@@ -628,9 +649,9 @@ public class TestGUISistemaViajes extends JFrame {
 			Aerolinea aerolinea = aerolineaEnCombo();
 			long codigoA = aerolinea.getCodigo();
 			long codigoVP = Long.parseLong(codVP);
-			int capacidad = Integer.parseInt(txtCapacidad.getText());
-			long tarifa = Long.parseLong(txtTarifa.getText());
-			long valorAdicional = Long.parseLong(txtImpuesto.getText());
+			int capacidad = Integer.parseInt(txtCapacidad.getText().trim().toLowerCase());
+			long tarifa = Long.parseLong(txtTarifa.getText().trim().toLowerCase());
+			long valorAdicional = Long.parseLong(txtImpuesto.getText().trim().toLowerCase());
 			int indiceAno = comboAno.getSelectedIndex();
 			int indiceMes = comboMes.getSelectedIndex();
 			int indiceDia = comboDia.getSelectedIndex();
@@ -640,48 +661,61 @@ public class TestGUISistemaViajes extends JFrame {
 			String tipo = comboTipoV.getItemAt(comboTipoV.getSelectedIndex());
 			long codVE = sistemaVuelo.crearVueloEspecifico(codigoA, codigoVP, fecha, tipoAvion, capacidad, tarifa, valorAdicional, tipo);
 			if(codVE >= 0){
-				JOptionPane.showMessageDialog(this, codVE);
+				//JOptionPane.showMessageDialog(this, codVE);
+				jdialog(String.valueOf(codVE));
 			}else{
-				JOptionPane.showConfirmDialog(this, "Error");
+				//JOptionPane.showConfirmDialog(this, "Error");
+				jdialog("Error");
 			}
 		}
 	}
 	private String[] generarAno(){
-		String[] arreglo = new String[200];
+		String[] arreglo = new String[CANTIDADANOS];
+		for(int i = 0; i < CANTIDADANOS; i++){
+			arreglo[i] = String.valueOf(ANOBASENACIMIENTO+i);
+		}
+		return arreglo;
+	}
+	private String[] generarAnoActual(){
+		String[] arreglo = new String[CANTIDADANOS];
 		for(int i = 0; i < 200; i++){
-			arreglo[i] = String.valueOf(1900+i);
+			arreglo[i] = String.valueOf(Utils.obtenerAnoActual()+i);
 		}
 		return arreglo;
 	}
 	private String[] generarMes(){
 		String[] arreglo = new String[12];
-		for(int i = 0; i < 12; i++){	//Se que la manera correcta sería i=1 y así no tengo que hacer i+1, sin embargo en el comboBox deja un espacio vacío al inicio cuando lo hago así
+		for(int i = 0; i < 12; i++){	
 			arreglo[i] = String.valueOf(i+1);
 		}
 		return arreglo;
 	}
 	private String[] generarDia(){
-		String[] arreglo = new String[32];
-		for(int i = 0; i < 31; i++){	//Se que la manera correcta sería i=1 y así no tengo que hacer i+1, sin embargo en el comboBox deja un espacio vacío al inicio cuando lo hago así
+		String[] arreglo = new String[31];
+		for(int i = 0; i < 31; i++){	
 			arreglo[i] = String.valueOf(i+1);
 		}
 		return arreglo;
 	}
 	private long registrarItinerario(ActionEvent e){
 		Agente agente = agenteEnCombo();
-		String nombre = txtnombreItinerario.getText();
+		String nombre = txtnombreItinerario.getText().trim().toLowerCase();
 		long codI = sistemaVuelo.crearItinerario(agente.getCodigo(), nombre);
 		if(codI >= 0){
-			JOptionPane.showMessageDialog(this, codI);
+			//JOptionPane.showMessageDialog(this, codI);
+			jdialog(String.valueOf(codI));
+			agregarNombreItinerarios(comboItinerarios);
+			agregarTrayectoItinerario.add(comboItinerarios);
 			return codI;
 		}else{
-			JOptionPane.showConfirmDialog(this, "Error");
+			//JOptionPane.showConfirmDialog(this, "Error");
+			jdialog("Error");
 			return -1;
 		}
 	}
-	private void agregarNombreAgentes(){
+	private void agregarNombreAgentes(JComboBox<String> combo){
 		for(Agente agente : sistemaVuelo.getAgentes()){
-			comboAgentes.addItem(agente.getNombre());
+			combo.addItem(agente.getNombre());
 		}
 	}
 	private void registrarPasajero(ActionEvent e, long codI){
@@ -701,8 +735,9 @@ public class TestGUISistemaViajes extends JFrame {
 		if(requi.equals("Si")){
 			requiere = true;
 		}
-		sistemaVuelo.crearPasajero(agente.getCodigo(), codI, txtID.getText(), txtNombre.getText(), tipo, requiere);
-		JOptionPane.showMessageDialog(this, "Registrado");
+		sistemaVuelo.crearPasajero(agente.getCodigo(), codI, txtID.getText().trim().toLowerCase(), txtNombre.getText().trim().toLowerCase(), tipo, requiere);
+		//JOptionPane.showMessageDialog(this, "Registrado");
+		jdialog("Pasajero registrado");
 	}
 	private Agente agenteEnCombo(){
 		int indiceAgente = comboAgentes.getSelectedIndex();
@@ -716,9 +751,9 @@ public class TestGUISistemaViajes extends JFrame {
 			return null;
 		}
 	}
-	private void agregarNombreCiudades(JComboBox<String> comboCiudad){
+	private void agregarNombreCiudades(JComboBox<String> combo){
 		for(Ciudad ciudad : sistemaVuelo.getCiudades()){
-			comboCiudad.addItem(ciudad.getNombre());
+			combo.addItem(ciudad.getNombre());
 		}
 	}
 	private void vuelosTrayecto(ActionEvent e){
@@ -760,5 +795,26 @@ public class TestGUISistemaViajes extends JFrame {
 		}
 		tableVrequerimientos = new JTable(rowData2, columNamesV2);
 		scrollPaneTrayectos.setViewportView(tableVrequerimientos);
+	}
+	private void registrarTrayecto(ActionEvent e){
+		int indexFilaSeleccionada = tableVrequerimientos.getSelectedRow();
+		String codVE = String.valueOf(tableVrequerimientos.getValueAt(indexFilaSeleccionada, 0));
+		int indiceAgente = comboAgentes_1.getSelectedIndex();
+		int indiceItinerario = comboItinerarios.getSelectedIndex();
+		long codAg = Long.parseLong(comboAgentes_1.getItemAt(indiceAgente));
+		long codI = Long.parseLong(comboItinerarios.getItemAt(indiceItinerario));
+		if(sistemaVuelo.crearTrayecto(codAg, Long.parseLong(codVE), codI)){
+			//JOptionPane.showMessageDialog(this, "Registrado");
+			jdialog("Trayecto registrado");
+		}else{
+			JOptionPane.showMessageDialog(this, "Error");
+		}
+	}
+	private void agregarNombreItinerarios(JComboBox<String> combo){
+		for(Agente agente : sistemaVuelo.getAgentes()){
+			for(Itinerario itinerario : agente.getItinerarios()){
+				combo.addItem(itinerario.getNombre());
+			}
+		}
 	}
 }

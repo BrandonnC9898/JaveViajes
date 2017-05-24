@@ -37,4 +37,7 @@ public class Utils {
 	public static long obtenerEdad (LocalDate fechaNacimiento){
 		return fechaNacimiento.until(LocalDate.now(), ChronoUnit.YEARS);
 	}
+	public static int obtenerAnoActual(){
+		return LocalDate.now().getYear();
+	}
 }

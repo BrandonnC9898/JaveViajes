@@ -155,5 +155,16 @@ public class Aerolinea {
 		}
 		return false;
 	}
+	public Trayecto crearTrayecto(long codVE, int cantiPasajeros){
+		Trayecto trayecto = null;
+		if(!this.vuelosPlaneados.isEmpty()){
+			for(VueloPlaneado vueloPlaneado : this.vuelosPlaneados){
+				if(vueloPlaneado.buscarVueloEspecifico(codVE) >= 0){
+					trayecto = vueloPlaneado.crearTrayecto(codVE, cantiPasajeros);
+				}
+			}
+		}
+		return trayecto;
+	}
 }
 

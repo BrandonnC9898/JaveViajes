@@ -207,4 +207,13 @@ public abstract class VueloEspecifico {
 	 * @return
 	 */
 	public abstract long calcularValorPasaje();
+	public Trayecto crearTrayecto(int cantiPasajeros){
+		if(this.cuposLibres >= cantiPasajeros){
+			Trayecto trayecto = new Trayecto(this, null);
+			this.agregarTrayecto(trayecto);
+			return trayecto;
+		}else{
+			return null;
+		}
+	}
 }
