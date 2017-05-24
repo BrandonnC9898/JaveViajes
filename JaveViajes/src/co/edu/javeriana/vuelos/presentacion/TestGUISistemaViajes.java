@@ -86,6 +86,7 @@ public class TestGUISistemaViajes extends JFrame {
 	private String[] columNames2 = {"Código", "Aerolinea", "Número vuelo", "Hora salida/llegada", "Origen", "Destino"};
 	private Vector columNamesV2;
 	private Vector rowData2;
+	private JScrollPane scrollPaneTrayectos;
 	/**
 	 * Launch the application.
 	 */
@@ -482,7 +483,7 @@ public class TestGUISistemaViajes extends JFrame {
 		JButton btnNewButton_2 = new JButton("Mostrar alternativas");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				vuelosTrayecto(e);
 			}
 		});
 		btnNewButton_2.setBounds(194, 112, 180, 23);
@@ -492,12 +493,14 @@ public class TestGUISistemaViajes extends JFrame {
 		lblVuelosQueCumplen.setBounds(10, 146, 180, 14);
 		agregarTrayectoItinerario.add(lblVuelosQueCumplen);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(79, 171, 516, 81);
-		agregarTrayectoItinerario.add(scrollPane);
-
-		tableVrequerimientos = new JTable();
-		scrollPane.setViewportView(tableVrequerimientos);
+		scrollPaneTrayectos = new JScrollPane();
+		scrollPaneTrayectos.setBounds(79, 171, 695, 81);
+		agregarTrayectoItinerario.add(scrollPaneTrayectos);
+		
+		rowData2 = new Vector();
+		columNamesV2 = new Vector(Arrays.asList(columNames2));
+		tableVrequerimientos = new JTable(rowData2, columNamesV2);
+		scrollPaneTrayectos.setViewportView(tableVrequerimientos);
 
 		JLabel lblNewLabel_6 = new JLabel("Seleccione agente");
 		lblNewLabel_6.setBounds(10, 278, 180, 14);
@@ -517,7 +520,7 @@ public class TestGUISistemaViajes extends JFrame {
 		JButton btnRegistrarTrayecto = new JButton("Registrar trayecto");
 		btnRegistrarTrayecto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vuelosTrayecto(e);
+				
 			}
 		});
 		btnRegistrarTrayecto.setBounds(115, 348, 139, 23);
@@ -750,10 +753,12 @@ public class TestGUISistemaViajes extends JFrame {
 						}
 						fila.add(tipo);
 						fila.add(extra);
-						rowData.add(fila);
+						rowData2.add(fila);
 					}
 				}
 			}
 		}
+		tableVrequerimientos = new JTable(rowData2, columNamesV2);
+		scrollPaneTrayectos.setViewportView(tableVrequerimientos);
 	}
 }
